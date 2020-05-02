@@ -1,59 +1,126 @@
+<!-- author: Cody N.S. |  project: "Back to Basics" -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
-        html {background-color: #1b1e2b; color: #8793cc}
-        #main {width: 500px; margin: 50px auto}
-        #input {width: 100%; height: 300px; padding: 12px 0; 
-                 border-top: 1px solid rgba(62, 49, 173, 0.7); 
-                 border-bottom: 1px solid rgba(62, 49, 173, 0.7)}
-        #output {margin: 20px 0 0 0}
-        input {background-color: #292d3e; color: orange; padding: 7px; border: 0}
-    </style>
-    <title>my JavaScript demo</title>
+	<link rel="stylesheet" href="styles.css">
+	<title>my JavaScript demo</title>
 </head>
 <body>
+	<script>
 
-    <script>
-        printHalf = (form) => {
-            document.getElementById("output").innerHTML = `Thank you ${form.myName.value}. Half of that is ` + (form.myNum.value / 2);
-        }
+    // some helper functions for making output easy
+    prnt = (codeString) => {
+      document.getElementById("outputArea").innerHTML += codeString += '<br>';
+    }
+    prntNS = (codeString) => {
+      document.getElementById("outputArea").innerHTML += codeString;
+    }
 
-        myFunction = () => {
-            const PI = 3.14159265358979;
-
-            // template strings + toFixed (closest thing to format specifiers)
-            // careful: toFixed returns a String, and its rounding is inconsistent for last digit
-            document.getElementById("testeroo").innerHTML = (
-                `<div id="input">
-                    The value of Pi is ${PI.toFixed(8)}<br><br>
-                    <form>
-                        <label for="name">Enter your name: </label> &nbsp; 
-                        <input type="text" id="myName" label="myName"><br><br>
-                        Enter a number: &nbsp; &nbsp;
-                        <input type="number" id="myNum" label="myNum" placeholder="(an integer)"><br><br>
-                        <button type="button" onclick="printHalf(this.form)">calculate half</button> 
-                    </form>
-
-                    <div id="output"></div>
-                </div>`
-                );
-            ;
+    // using the original function style. Why not.
+    function finishAcc (total) {
+      let finalResult = 'Final total: &nbsp; <output>' + total + '</output>';
+      document.getElementById("accumulator").innerHTML = finalResult;
+    }
 
 
+    computeStuff = () => { // computeStuff = (form)\
+      document.getElementById("outputArea").innerHTML = "";
+      const PI = 3.14159265358979323;
+      prnt(`The value of Pi to 8 digits is ${PI.toFixed(8)}<br>`);
 
-        }
-    </script>
+      let name = "User"; // let name = form.myName.value;
+      let x = 767; // let x = parseInt(form.myNum.value);
+ 
+      prnt(`Thank you ${name}. Half your input number is ` + (x / 2));
 
 
-    <div id="main">
-        <h1>Hello, World!</h1>
-        <div id="testeroo">\o\|o|/o/</div>
-        <br/><br/>
-        <button type="button" onclick="myFunction()">START</button>
-        <br/><br/>
+      // branching
+      if (x > 200)
+        prnt("Your input number is greater than 200");
+      else if (100 < x <= 200)
+        prnt("Your input is > 100 but <= 200");
+      else
+        prnt("Your input number is <= 100");
 
-    </div>
+      if (x % 25 == 0 || (x % 99 == 0 && x > 0))
+        prnt("Woot! Special number!");
+
+
+      // checking membership
+      prntNS("Your name '" + name + "' is ");
+      const st = "Hello, World!"
+      if (!st.includes(name))
+        prntNS("not ");
+      prnt("in '" + st + "<br>");
+
+
+      // loops
+      prnt("for loop:");
+      let sum = 0
+      for (let i = 1; i <= 10; i++) {
+        sum += i;
+        prnt("i = " + i + " &nbsp; &nbsp; total = " + sum);
+      }
+
+      prnt("<br>for-of loop (like for-each):");
+      for (ch of "foobar")
+        prntNS(ch + "-");
+
+      // not using a loop here, but this form is set up like a while loop.
+      // Syntax looks complex, but it's really not. I'm breaking up the lines so they
+      // don't run on for ~300 characters. Annoying.
+      prnt("<br><h3>Accumulator:</h3>");
+      sum = 0;
+      let temp = 0;
+      prnt('<div id="accumulator">' +
+             '<form onkeypress="if(event.keyCode == 13) document.getElementById(`add`).click(); return event.keyCode != 13">' + 
+              // ^ onkeypress defines what happens when keyboard input is detected. keyCode 13 is the Enter key,
+              // and the default action for it is form submission, which we don't want, so the above line
+              // instead makes an Enter push click the 'add' button and neutralizes its default behaviour
+              '<input type="number" id="num" label="num" ' +
+               'placeholder="Enter a non-negative number (negative to end the calculation)"><br><br>' +
+               '<button type="button" id="add" onclick="' +
+               'if (parseInt(num.value) < 0) finishAcc(total.value);' +
+               'else {total.value = (parseInt(total.value) || 0) + (parseInt(num.value) || 0); num.value = ``; ' +
+               'num.placeholder= `Enter another number (negative to end the calculation)`}">Add to total</button>' +
+               ' &nbsp; &nbsp; <button type="button" onclick="total.value = 0; num.value = ``; ' +
+               'num.placeholder= `Enter a non-negative number (negative to end the calculation)`">Clear</button>' +
+               '<br><br>' +
+               'Total: &nbsp; <output name="total" for="total num" />' +
+             '</form>' +
+           '</div>');         
+
+
+    }
+
+		myFunction = () => {
+			// template strings + toFixed (closest thing to format specifiers)
+			// careful: toFixed returns a String, and its rounding is inconsistent for last digit
+			document.getElementById("testeroo").innerHTML = (
+				`<div id="input">
+					<form>
+						<label for="name">Enter your name: </label> &nbsp; 
+						<input type="text" id="myName" label="myName"><br><br>
+						Enter a number: &nbsp; &nbsp;  <!-- can do it like this without the label, but better with -->
+						<input type="number" id="myNum" label="myNum" placeholder="(an integer)"><br><br>
+            <button type="button" onclick="computeStuff(this.form)">compute</button> 
+          </form>
+				</div>`
+				);
+
+		}
+	</script>
+
+
+	<div id="main">
+    <h1>Hello, World!</h1>
+    <!-- <button type="button" onclick="myFunction()">START</button> -->
+  <button type="button" onclick="computeStuff()">START</button>
+		<br><br><br>
+    <div id="testeroo">\o\|o|/o/</div>
+    <div id="outputArea"></div>
+	</div>
 
 </body>
 </html>
