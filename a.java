@@ -3,7 +3,7 @@
 
 import java.util.Scanner;
 
-public class a {
+public class A {
 
     // because I don't feel like typing System.out... every time
     private static void print(String s) {
@@ -14,7 +14,13 @@ public class a {
     }
 
 
-    public static void main(final String[] args) {
+    // methods
+    private int multiply(int first, int second) {
+        return (first * second);
+    }
+
+// ----------------------------------------------------------------------------    
+    public static void main(String[] args) {
         System.out.println();
 
         final double PI = 3.14159265358979; 
@@ -81,10 +87,14 @@ public class a {
         println("\n  Final total: " + sum);
 
 
+        // methods (see top for definitions)
+        A me = new A();
+        int product = me.multiply(5, 6);
+        println("\nResult of 5 x 6 is: " + product);
 
 
         keyboard.close(); // don't close a System.in object unless at very end of program
         System.out.println();
     }
-    
+    // ----------------------------------------------------------------------------
 }

@@ -5,10 +5,16 @@
 
 using namespace std;
 
+
 void print(string st) {
     cout << st << endl;
 }
 
+int multiply(int first, int second) {
+    return (first * second);
+}
+
+// ----------------------------------------------------------------------------
 int main() {
     cout << "\n";
 
@@ -72,9 +78,20 @@ int main() {
         if (temp >= 0)
             sum += temp;
     }
-    print("\n  Final total: " + to_string(sum));
+    print("\n  Final total: " + to_string(sum)); // have to cast sum to a string
+
+
+    // functions (see top for definitions)
+    int product = multiply(5, 6);
+    cout << "\nResult of 5 x 6 is: " << product << endl;
+
+
+
+
+
 
 
     cout << endl;
     return 0;
 }
+// ----------------------------------------------------------------------------
